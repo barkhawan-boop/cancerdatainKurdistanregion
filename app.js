@@ -2,29 +2,35 @@ const DATA = window.CANCER_DATA;
 const COLUMNS = DATA.columns;
 const ROWS = DATA.rows;
 const columnIndex = Object.fromEntries(COLUMNS.map((name, index) => [name, index]));
+const col = (...names) => names.map(name => columnIndex[name]).find(index => index !== undefined);
 
 const FIELD = {
-  id: columnIndex.IDAll,
-  governorate: columnIndex.Governorate,
-  year: columnIndex["Year of diagnosis"],
-  basis: columnIndex["Basis of diagnosis"],
-  site: columnIndex["Topography type (anatomical site category)"],
-  morphology: columnIndex["Morphology code (histology code)"],
-  behavior: columnIndex["Behavior code of tumor"],
-  extent: columnIndex["Extent of disease (umor extension)"],
-  surgical: columnIndex["Surgical treatment"],
-  chemo: columnIndex.Chemotherapy,
-  radio: columnIndex.Radiotherapy,
-  hormonal: columnIndex["Hormonal therapy"],
-  targeted: columnIndex["Targeted therapy"],
-  family: columnIndex["Family history of cancer"],
-  sex: columnIndex.SEX,
-  age: columnIndex["Age at diagnosis"],
-  ageGroup: columnIndex["Age Groups"],
-  nationality: columnIndex.Nationality,
-  address1: columnIndex["Related Address 1"],
-  address2: columnIndex["Related Address 2"],
-  address3: columnIndex["Related Address 3"]
+  id: col("IDAll"),
+  governorate: col("Governorate"),
+  year: col("Year of diagnosis"),
+  basis: col("Basis of diagnosis"),
+  specificSite: col("Specific Site"),
+  site: col("Topography type (anatomical site category)"),
+  morphology: col("Morphology code (histology code)"),
+  behavior: col("Behavior Description", "Behavior code of tumor"),
+  extent: col("Extent of disease (umor extension)"),
+  laterality: col("Laterality Description", "Laterality of primary site"),
+  tStage: col("T (Tumor)", "T"),
+  nStage: col("N (Nodes)", "N"),
+  mStage: col("M (Metastasis)", "M"),
+  surgical: col("Surgical treatment"),
+  chemo: col("Chemotherapy"),
+  radio: col("Radiotherapy"),
+  hormonal: col("Hormonal therapy"),
+  targeted: col("Targeted therapy"),
+  family: col("Family history of cancer"),
+  sex: col("SEX"),
+  age: col("Age at diagnosis"),
+  ageGroup: col("Age Groups"),
+  nationality: col("Nationality"),
+  address1: col("Related Address 1"),
+  address2: col("Related Address 2"),
+  address3: col("Related Address 3", "Related Address 2")
 };
 
 const ADMIN_SECTIONS = [
@@ -44,6 +50,7 @@ const ADMIN_SECTIONS = [
     titleKey: "tumorClassification",
     fields: [
       FIELD.site,
+      FIELD.specificSite,
       columnIndex["Topography code (primary tumor site)"],
       columnIndex["Secondary (grouped topography code)"],
       FIELD.morphology,
@@ -55,10 +62,10 @@ const ADMIN_SECTIONS = [
     titleKey: "stageDisease",
     fields: [
       FIELD.extent,
-      columnIndex["Laterality of primary site"],
-      columnIndex.T,
-      columnIndex.N,
-      columnIndex.M,
+      FIELD.laterality,
+      FIELD.tStage,
+      FIELD.nStage,
+      FIELD.mStage,
       FIELD.family
     ]
   },
@@ -93,10 +100,10 @@ const DROPDOWN_FIELDS = new Set([
   FIELD.basis,
   FIELD.behavior,
   FIELD.extent,
-  columnIndex["Laterality of primary site"],
-  columnIndex.T,
-  columnIndex.N,
-  columnIndex.M,
+  FIELD.laterality,
+  FIELD.tStage,
+  FIELD.nStage,
+  FIELD.mStage,
   FIELD.surgical,
   FIELD.chemo,
   FIELD.radio,
@@ -114,16 +121,22 @@ const KURDISH_COLUMNS = {
   Governorate: "پارێزگا",
   "Year of diagnosis": "ساڵی دەستنیشانکردن",
   "Basis of diagnosis": "بنەمای دەستنیشانکردن",
+  "Specific Site": "شوێنی ورد",
   "Topography code (primary tumor site)": "کۆدی شوێنی سەرەکی توومەر",
   "Secondary (grouped topography code)": "کۆدی گروپی شوێن",
   "Topography type (anatomical site category)": "جۆری شوێنی شێرپەنجە",
   "Morphology code (histology code)": "کۆدی مۆرفۆلۆجی",
   "Behavior code of tumor": "کۆدی ڕەفتاری توومەر",
+  "Behavior Description": "وەسفی ڕەفتاری توومەر",
   "Extent of disease (umor extension)": "ئاستی پەرەسەندنی نەخۆشی",
   "Laterality of primary site": "لایەنی شوێنی سەرەکی",
+  "Laterality Description": "وەسفی لایەنی شوێن",
   T: "T",
   N: "N",
   M: "M",
+  "T (Tumor)": "T (توومەر)",
+  "N (Nodes)": "N (گرێ لیمفاوی)",
+  "M (Metastasis)": "M (بڵاوبوونەوە)",
   "Surgical treatment": "چارەسەری نەشتەرگەری",
   Chemotherapy: "کیمیاوی",
   Radiotherapy: "تیشک",
@@ -145,6 +158,9 @@ const KURDISH_VALUES = {
   "#N/A": "نادیار",
   "N/A": "نادیار",
   UNKNOWN: "نادیار",
+  YES: "بەڵێ",
+  NO: "نەخێر",
+  IRAQI: "عێراقی",
   OTHER: "هی تر",
   MALE: "نێر",
   FEMALE: "مێ",
@@ -189,7 +205,47 @@ const KURDISH_VALUES = {
   PERITONEUM: "پەردەی ناوسک",
   PLACENTA: "جێرە",
   TESTIS: "گوێزە",
-  "ADRENAL GLAND": "غودەی سەرگورچیلە"
+  "ADRENAL GLAND": "غودەی سەرگورچیلە",
+  "MALIGNANT, PRIMARY SITE": "خراپە، شوێنی سەرەکی",
+  "UNCERTAIN WHETHER BENIGN OR MALIGNANT (BORDERLINE)": "دڵنیانییە باشخۆ یان خراپە (سنوردار)",
+  BENIGN: "باشخۆ",
+  "CARCINOMA IN SITU (NON-INVASIVE)": "کارسینۆما لە شوێنی خۆیدا (ناچوونەناو)",
+  "UNKNOWN CODE (7)": "کۆدی نادیار (٧)",
+  "UNKNOWN CODE (5)": "کۆدی نادیار (٥)",
+  LOCALIZED: "سنووردار",
+  "DISTANT METASTASIS": "بڵاوبوونەوەی دوور",
+  "UNKNOWN/UNSPECIFIED": "نادیار/دیارینەکراو",
+  "BENIGN/BORDERLINE": "باشخۆ/سنوردار",
+  "REGIONAL LYMPH NODES ONLY": "تەنها گرێی لیمفاوی ناوچەیی",
+  "REGIONAL BY DIRECT EXTENSION ONLY": "ناوچەیی بە پەرەسەندنی ڕاستەوخۆ",
+  "REGIONAL BY BOTH DIRECT EXTENSION AND LYMPH NODES": "ناوچەیی بە پەرەسەندنی ڕاستەوخۆ و گرێی لیمفاوی",
+  "REGIONAL, NOS": "ناوچەیی، دیارینەکراو",
+  "DATA ERROR/OTHER": "هەڵەی داتا/هی تر",
+  "IN SITU": "لە شوێنی خۆیدا",
+  "NOT DOCUMENTED/MISSING": "تۆمارنەکراو/ون",
+  "UNKNOWN/NOT STATED": "نادیار/نەوتراو",
+  RIGHT: "ڕاست",
+  LEFT: "چەپ",
+  "NOT A PAIRED ORGAN": "ئەندامی جووت نییە",
+  BILATERAL: "هەردوو لایەن",
+  "INVALID CODE": "کۆدی نادروست",
+  "TX: CANNOT BE ASSESSED": "TX: ناتوانرێت هەڵبسەنگێنرێت",
+  "NX: CANNOT BE ASSESSED": "NX: ناتوانرێت هەڵبسەنگێنرێت",
+  "MX: CANNOT BE ASSESSED": "MX: ناتوانرێت هەڵبسەنگێنرێت",
+  "NO EVIDENCE OF PRIMARY TUMOR": "هیچ بەڵگەیەک بۆ توومەری سەرەکی نییە",
+  "T1: TUMOR SIZE/EXTENT 1": "T1: قەبارە/پەرەسەندنی توومەر ١",
+  "T2: TUMOR SIZE/EXTENT 2": "T2: قەبارە/پەرەسەندنی توومەر ٢",
+  "T3: TUMOR SIZE/EXTENT 3": "T3: قەبارە/پەرەسەندنی توومەر ٣",
+  "T4: TUMOR SIZE/EXTENT 4": "T4: قەبارە/پەرەسەندنی توومەر ٤",
+  "N0: NO REGIONAL LYMPH NODE METASTASIS": "N0: هیچ بڵاوبوونەوەیەک بۆ گرێی لیمفاوی ناوچەیی نییە",
+  "N1: REGIONAL LYMPH NODE INVOLVEMENT 1": "N1: بەشداری گرێی لیمفاوی ناوچەیی ١",
+  "N2: REGIONAL LYMPH NODE INVOLVEMENT 2": "N2: بەشداری گرێی لیمفاوی ناوچەیی ٢",
+  "N3: REGIONAL LYMPH NODE INVOLVEMENT 3": "N3: بەشداری گرێی لیمفاوی ناوچەیی ٣",
+  "N4: REGIONAL LYMPH NODE INVOLVEMENT 4": "N4: بەشداری گرێی لیمفاوی ناوچەیی ٤",
+  "M0: NO DISTANT METASTASIS": "M0: بڵاوبوونەوەی دوور نییە",
+  "M1: DISTANT METASTASIS": "M1: بڵاوبوونەوەی دوور",
+  "M3: DISTANT METASTASIS": "M3: بڵاوبوونەوەی دوور",
+  "NOT DOCUMENTED": "تۆمارنەکراو"
 };
 
 const ARABIC_COLUMNS = {
@@ -197,16 +253,22 @@ const ARABIC_COLUMNS = {
   Governorate: "المحافظة",
   "Year of diagnosis": "سنة التشخيص",
   "Basis of diagnosis": "أساس التشخيص",
+  "Specific Site": "الموقع المحدد",
   "Topography code (primary tumor site)": "رمز موقع الورم الأساسي",
   "Secondary (grouped topography code)": "رمز مجموعة الموقع",
   "Topography type (anatomical site category)": "نوع موقع السرطان",
   "Morphology code (histology code)": "رمز النسيج",
   "Behavior code of tumor": "رمز سلوك الورم",
+  "Behavior Description": "وصف سلوك الورم",
   "Extent of disease (umor extension)": "مدى انتشار المرض",
   "Laterality of primary site": "جانب الموقع الأساسي",
+  "Laterality Description": "وصف جانب الموقع",
   T: "T",
   N: "N",
   M: "M",
+  "T (Tumor)": "T (الورم)",
+  "N (Nodes)": "N (العقد اللمفاوية)",
+  "M (Metastasis)": "M (الانتقال)",
   "Surgical treatment": "العلاج الجراحي",
   Chemotherapy: "العلاج الكيميائي",
   Radiotherapy: "العلاج الإشعاعي",
@@ -228,6 +290,9 @@ const ARABIC_VALUES = {
   "#N/A": "غير معروف",
   "N/A": "غير معروف",
   UNKNOWN: "غير معروف",
+  YES: "نعم",
+  NO: "لا",
+  IRAQI: "عراقي",
   OTHER: "أخرى",
   MALE: "ذكر",
   FEMALE: "أنثى",
@@ -272,7 +337,47 @@ const ARABIC_VALUES = {
   PERITONEUM: "الصفاق",
   PLACENTA: "المشيمة",
   TESTIS: "الخصية",
-  "ADRENAL GLAND": "الغدة الكظرية"
+  "ADRENAL GLAND": "الغدة الكظرية",
+  "MALIGNANT, PRIMARY SITE": "خبيث، موقع أولي",
+  "UNCERTAIN WHETHER BENIGN OR MALIGNANT (BORDERLINE)": "غير مؤكد حميد أو خبيث (حدي)",
+  BENIGN: "حميد",
+  "CARCINOMA IN SITU (NON-INVASIVE)": "سرطان موضعي (غير غازي)",
+  "UNKNOWN CODE (7)": "رمز غير معروف (7)",
+  "UNKNOWN CODE (5)": "رمز غير معروف (5)",
+  LOCALIZED: "موضعي",
+  "DISTANT METASTASIS": "انتقال بعيد",
+  "UNKNOWN/UNSPECIFIED": "غير معروف/غير محدد",
+  "BENIGN/BORDERLINE": "حميد/حدي",
+  "REGIONAL LYMPH NODES ONLY": "العقد اللمفاوية الإقليمية فقط",
+  "REGIONAL BY DIRECT EXTENSION ONLY": "إقليمي بالامتداد المباشر فقط",
+  "REGIONAL BY BOTH DIRECT EXTENSION AND LYMPH NODES": "إقليمي بالامتداد المباشر والعقد اللمفاوية",
+  "REGIONAL, NOS": "إقليمي، غير محدد",
+  "DATA ERROR/OTHER": "خطأ بيانات/أخرى",
+  "IN SITU": "موضعي",
+  "NOT DOCUMENTED/MISSING": "غير موثق/مفقود",
+  "UNKNOWN/NOT STATED": "غير معروف/غير مذكور",
+  RIGHT: "يمين",
+  LEFT: "يسار",
+  "NOT A PAIRED ORGAN": "ليس عضوا مزدوجا",
+  BILATERAL: "ثنائي الجانب",
+  "INVALID CODE": "رمز غير صحيح",
+  "TX: CANNOT BE ASSESSED": "TX: لا يمكن تقييمه",
+  "NX: CANNOT BE ASSESSED": "NX: لا يمكن تقييمه",
+  "MX: CANNOT BE ASSESSED": "MX: لا يمكن تقييمه",
+  "NO EVIDENCE OF PRIMARY TUMOR": "لا دليل على ورم أولي",
+  "T1: TUMOR SIZE/EXTENT 1": "T1: حجم/امتداد الورم 1",
+  "T2: TUMOR SIZE/EXTENT 2": "T2: حجم/امتداد الورم 2",
+  "T3: TUMOR SIZE/EXTENT 3": "T3: حجم/امتداد الورم 3",
+  "T4: TUMOR SIZE/EXTENT 4": "T4: حجم/امتداد الورم 4",
+  "N0: NO REGIONAL LYMPH NODE METASTASIS": "N0: لا انتقال إلى العقد اللمفاوية الإقليمية",
+  "N1: REGIONAL LYMPH NODE INVOLVEMENT 1": "N1: إصابة العقد اللمفاوية الإقليمية 1",
+  "N2: REGIONAL LYMPH NODE INVOLVEMENT 2": "N2: إصابة العقد اللمفاوية الإقليمية 2",
+  "N3: REGIONAL LYMPH NODE INVOLVEMENT 3": "N3: إصابة العقد اللمفاوية الإقليمية 3",
+  "N4: REGIONAL LYMPH NODE INVOLVEMENT 4": "N4: إصابة العقد اللمفاوية الإقليمية 4",
+  "M0: NO DISTANT METASTASIS": "M0: لا انتقال بعيد",
+  "M1: DISTANT METASTASIS": "M1: انتقال بعيد",
+  "M3: DISTANT METASTASIS": "M3: انتقال بعيد",
+  "NOT DOCUMENTED": "غير موثق"
 };
 
 const ADMIN_USER = "Admin";
@@ -444,12 +549,27 @@ function displayColumnName(columnName) {
   return columnName;
 }
 
+function displayAnatomyPhrase(text, valueMap, nosLabel, glandLabel) {
+  const normalized = text.toUpperCase();
+  if (normalized.endsWith(", NOS")) {
+    const base = normalized.replace(/, NOS$/, "");
+    if (valueMap[base]) return `${valueMap[base]}، ${nosLabel}`;
+  }
+  if (normalized.endsWith(" GLAND")) {
+    const base = normalized.replace(/ GLAND$/, "");
+    if (valueMap[base]) return `${valueMap[base]} ${glandLabel}`;
+  }
+  return "";
+}
+
 function displayFieldValue(index, value) {
   const text = String(value ?? "").trim();
   if (text === "") return text;
   const normalized = text.toUpperCase();
   if (lang === "ckb") {
     if (KURDISH_VALUES[normalized]) return KURDISH_VALUES[normalized];
+    const anatomy = displayAnatomyPhrase(text, KURDISH_VALUES, "دیارینەکراو", "(غودە)");
+    if (anatomy) return anatomy;
     if ([FIELD.surgical, FIELD.chemo, FIELD.radio, FIELD.hormonal, FIELD.targeted, FIELD.family].includes(index)) {
       if (text === "1") return "بەڵێ";
       if (text === "2") return "نەخێر";
@@ -464,6 +584,8 @@ function displayFieldValue(index, value) {
   }
   if (lang === "ar") {
     if (ARABIC_VALUES[normalized]) return ARABIC_VALUES[normalized];
+    const anatomy = displayAnatomyPhrase(text, ARABIC_VALUES, "غير محدد", "(غدة)");
+    if (anatomy) return anatomy;
     if ([FIELD.surgical, FIELD.chemo, FIELD.radio, FIELD.hormonal, FIELD.targeted, FIELD.family].includes(index)) {
       if (text === "1") return "نعم";
       if (text === "2") return "لا";
@@ -655,12 +777,13 @@ function renderAdminForm(row = emptyRow()) {
   const form = document.getElementById("caseForm");
   const rendered = new Set();
   const sections = ADMIN_SECTIONS.map((section, sectionIndex) => {
-    section.fields.forEach(index => rendered.add(index));
+    const fields = section.fields.filter(Number.isInteger);
+    fields.forEach(index => rendered.add(index));
     return `
       <details class="case-section" ${sectionIndex < 2 ? "open" : ""}>
         <summary>${escapeHtml(t(section.titleKey))}</summary>
         <div class="case-section-grid">
-          ${section.fields.map(index => renderAdminField(index, row)).join("")}
+          ${fields.map(index => renderAdminField(index, row)).join("")}
         </div>
       </details>
     `;
