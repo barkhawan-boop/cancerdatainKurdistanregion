@@ -30,7 +30,8 @@ const FIELD = {
   nationality: col("Nationality"),
   address1: col("Related Address 1"),
   address2: col("Related Address 2"),
-  address3: col("Related Address 3", "Related Address 2")
+  address3: col("Related Address 3"),
+  addressGroup: col("Related Address 3", "Related Address 2")
 };
 
 const ADMIN_SECTIONS = [
@@ -657,7 +658,7 @@ function populateFilters() {
   fillSelect("sexFilter", FIELD.sex);
   fillSelect("ageGroupFilter", FIELD.ageGroup);
   fillSelect("siteFilter", FIELD.site);
-  fillSelect("addressFilter", FIELD.address3);
+  fillSelect("addressFilter", FIELD.addressGroup);
 }
 
 function getFilterValues() {
@@ -680,7 +681,7 @@ function applyFilters() {
     if (f.sex && optionValue(row[FIELD.sex]) !== f.sex) return false;
     if (f.ageGroup && optionValue(row[FIELD.ageGroup]) !== f.ageGroup) return false;
     if (f.site && optionValue(row[FIELD.site]) !== f.site) return false;
-    if (f.address && optionValue(row[FIELD.address3]) !== f.address) return false;
+    if (f.address && optionValue(row[FIELD.addressGroup]) !== f.address) return false;
     if (f.q && !row.some((value, index) => {
       const raw = String(value ?? "").toLowerCase();
       const displayed = displayFieldValue(index, value).toLowerCase();
@@ -921,10 +922,10 @@ function buildReport(rows, maxRows = rows.length) {
     sex: FIELD.sex,
     ageGroup: FIELD.ageGroup,
     site: FIELD.site,
-    address: FIELD.address3
+    address: FIELD.addressGroup
   };
   const filters = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
-    const label = key === "q" ? t("search") : displayColumnName(COLUMNS[filterLabels[key]]);
+    const label = key === "q" ? t("search") : key === "address" ? t("address") : displayColumnName(COLUMNS[filterLabels[key]]);
     const shown = key === "q" ? value : displayFieldValue(filterLabels[key], value);
     return `${label}: ${shown}`;
   }).join(" | ") || t("all");
@@ -982,10 +983,10 @@ function buildFilterText() {
     sex: FIELD.sex,
     ageGroup: FIELD.ageGroup,
     site: FIELD.site,
-    address: FIELD.address3
+    address: FIELD.addressGroup
   };
   const parts = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
-    const label = key === "q" ? t("search") : displayColumnName(COLUMNS[filterLabels[key]]);
+    const label = key === "q" ? t("search") : key === "address" ? t("address") : displayColumnName(COLUMNS[filterLabels[key]]);
     const shown = key === "q" ? value : displayFieldValue(filterLabels[key], value);
     return `${label}: ${shown}`;
   });
