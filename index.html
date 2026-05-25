@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Kurdistan Cancer Data Report 2020-2024</title>
+  <link rel="stylesheet" href="styles.css?v=20260525-12">
+  <script defer src="data/cancer-data.js?v=20260525-12"></script>
+  <script defer src="app.js?v=20260525-12"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="assets/cancer-ribbon.png" alt="Cancer awareness ribbon">
+        <div>
+          <p class="eyebrow" data-i18n="region">Kurdistan Region</p>
+          <h1 data-i18n="appTitle">Cancer Data Report</h1>
+        </div>
+      </div>
+
+      <div class="language-switch" aria-label="Language">
+        <button class="lang-btn is-active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ckb">کوردی</button>
+        <button class="lang-btn" data-lang="ar">العربية</button>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Main sections">
+        <button class="nav-btn is-active" data-view="dashboard" data-i18n="dashboard">Dashboard</button>
+        <button class="nav-btn" data-view="cases" data-i18n="cases">Cases</button>
+        <button class="nav-btn" data-view="global" data-i18n="globalStats">Global Stats</button>
+        <button class="nav-btn" data-view="prevention" data-i18n="prevention">Prevention</button>
+        <button class="nav-btn" data-view="admin" data-i18n="admin">Admin</button>
+      </nav>
+
+      <section class="filters-panel">
+        <div class="panel-title">
+          <h2 data-i18n="filters">Filters</h2>
+          <button class="text-btn" id="resetFilters" data-i18n="reset">Reset</button>
+        </div>
+        <label>
+          <span data-i18n="search">Search</span>
+          <input id="searchInput" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="ID, address, morphology...">
+        </label>
+        <button class="filter-action" id="runSearchBtn" data-i18n="searchNow">Search</button>
+        <label>
+          <span data-i18n="year">Year</span>
+          <select id="yearFilter"></select>
+        </label>
+        <label>
+          <span data-i18n="governorate">Governorate</span>
+          <select id="governorateFilter"></select>
+        </label>
+        <label>
+          <span data-i18n="sex">Sex</span>
+          <select id="sexFilter"></select>
+        </label>
+        <label>
+          <span data-i18n="ageGroup">Age Group</span>
+          <select id="ageGroupFilter"></select>
+        </label>
+        <label>
+          <span data-i18n="cancerSite">Cancer Site</span>
+          <select id="siteFilter"></select>
+        </label>
+        <label>
+          <span data-i18n="address">Address Group</span>
+          <select id="addressFilter"></select>
+        </label>
+      </section>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h2 data-i18n="reportTitle">Recorded cancer cases, 2020-2024</h2>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" id="downloadPdfBtn" title="Download PDF">
+            <span class="icon">PDF</span><span data-i18n="downloadPdf">Download PDF</span>
+          </button>
+          <button class="icon-btn" id="printBtn" title="Print">
+            <span class="icon">PR</span><span data-i18n="print">Print</span>
+          </button>
+          <button class="icon-btn" id="exportCsvBtn" title="Export CSV">
+            <span class="icon">CSV</span><span data-i18n="exportCsv">Export CSV</span>
+          </button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view is-active">
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="chart-grid">
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="casesByYear">Cases by Year</h3>
+            </div>
+            <div id="yearChart" class="bar-chart"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="topCancerSites">Top Cancer Sites</h3>
+            </div>
+            <div id="siteChart" class="bar-chart"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="byGovernorate">By Governorate</h3>
+            </div>
+            <div id="governorateChart" class="bar-chart"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="byAge">By Age Group</h3>
+            </div>
+            <div id="ageChart" class="bar-chart"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="cases" class="view">
+        <section class="panel">
+          <div class="panel-title">
+            <h3 data-i18n="allData">All Filtered Data</h3>
+            <div class="table-tools">
+              <button class="text-btn" id="prevPage" data-i18n="prev">Previous</button>
+              <span id="pageInfo"></span>
+              <button class="text-btn" id="nextPage" data-i18n="next">Next</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="casesTable"></table>
+          </div>
+        </section>
+      </section>
+
+      <section id="global" class="view">
+        <div class="split-grid">
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="globalStats">Global Cancer Statistics</h3>
+              <button class="text-btn" id="refreshSources" data-i18n="refreshSources">Check sources</button>
+            </div>
+            <div id="globalCards" class="info-grid"></div>
+            <p class="source-note" id="sourceStatus"></p>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="officialSources">Official Sources</h3>
+            </div>
+            <div id="sourceLinks" class="source-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="prevention" class="view">
+        <div class="split-grid">
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="preventionTitle">How to reduce cancer risk</h3>
+            </div>
+            <div id="adviceList" class="advice-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3 data-i18n="iraqReasons">Main cancer risk drivers in Iraq</h3>
+            </div>
+            <div id="iraqReasonList" class="advice-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="admin" class="view">
+        <section class="panel" id="loginPanel">
+          <div class="panel-title">
+            <h3 data-i18n="adminLogin">Admin Login</h3>
+          </div>
+          <form id="loginForm" class="admin-form">
+            <label><span data-i18n="username">Username</span><input id="username" autocomplete="username"></label>
+            <label><span data-i18n="password">Password</span><input id="password" type="password" autocomplete="current-password"></label>
+            <button class="primary-btn" type="submit" data-i18n="login">Login</button>
+          </form>
+          <p class="source-note" data-i18n="localAdminNote">Admin credentials are private. Changes are saved in this browser.</p>
+        </section>
+
+        <section class="panel is-hidden" id="adminPanel">
+          <div class="panel-title">
+            <h3 data-i18n="manageCases">Manage cases</h3>
+            <div class="table-tools">
+              <button class="text-btn" id="newCaseBtn" data-i18n="newCase">New Case</button>
+              <button class="text-btn" id="saveEditsBtn" data-i18n="saveEdits">Export Edits</button>
+              <button class="text-btn danger" id="logoutBtn" data-i18n="logout">Logout</button>
+            </div>
+          </div>
+          <form id="caseForm" class="case-form"></form>
+          <div class="admin-actions">
+            <button class="primary-btn" id="saveCaseBtn" data-i18n="saveCase">Save Case</button>
+            <button class="secondary-btn" id="deleteCaseBtn" data-i18n="deleteCase">Delete Case</button>
+            <button class="secondary-btn" id="clearFormBtn" data-i18n="clearForm">Clear</button>
+          </div>
+          <p class="source-note" data-i18n="adminHint">Select any row in the Cases table to edit it here.</p>
+        </section>
+      </section>
+
+      <section id="printArea" class="print-area" aria-hidden="true"></section>
+    </main>
+  </div>
+</body>
+</html>
