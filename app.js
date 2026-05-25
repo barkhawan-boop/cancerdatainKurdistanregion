@@ -622,9 +622,12 @@ function getId(row) {
   return String(row[FIELD.id] ?? "");
 }
 
+function optionValue(value) {
+  return String(value ?? "").trim();
+}
+
 function uniqueValues(index) {
-  return [...new Set(allRows.map(row => row[index]).filter(value => value !== null && value !== undefined && value !== ""))]
-    .map(String)
+  return [...new Set(allRows.map(row => optionValue(row[index])).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
 }
 
@@ -672,12 +675,12 @@ function getFilterValues() {
 function applyFilters() {
   const f = getFilterValues();
   filteredRows = allRows.filter(row => {
-    if (f.year && String(row[FIELD.year]) !== f.year) return false;
-    if (f.governorate && String(row[FIELD.governorate]) !== f.governorate) return false;
-    if (f.sex && String(row[FIELD.sex]) !== f.sex) return false;
-    if (f.ageGroup && String(row[FIELD.ageGroup]) !== f.ageGroup) return false;
-    if (f.site && String(row[FIELD.site]) !== f.site) return false;
-    if (f.address && String(row[FIELD.address3]) !== f.address) return false;
+    if (f.year && optionValue(row[FIELD.year]) !== f.year) return false;
+    if (f.governorate && optionValue(row[FIELD.governorate]) !== f.governorate) return false;
+    if (f.sex && optionValue(row[FIELD.sex]) !== f.sex) return false;
+    if (f.ageGroup && optionValue(row[FIELD.ageGroup]) !== f.ageGroup) return false;
+    if (f.site && optionValue(row[FIELD.site]) !== f.site) return false;
+    if (f.address && optionValue(row[FIELD.address3]) !== f.address) return false;
     if (f.q && !row.some((value, index) => {
       const raw = String(value ?? "").toLowerCase();
       const displayed = displayFieldValue(index, value).toLowerCase();
