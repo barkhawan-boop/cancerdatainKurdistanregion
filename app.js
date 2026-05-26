@@ -13,7 +13,7 @@ const FIELD = {
   site: col("Topography type (anatomical site category)"),
   morphology: col("Morphology code (histology code)"),
   behavior: col("Behavior Description", "Behavior code of tumor"),
-  extent: col("Extent of disease (umor extension)"),
+  extent: col("Extent of disease (tumor extension)", "Extent of disease (umor extension)"),
   laterality: col("Laterality Description", "Laterality of primary site"),
   tStage: col("T (Tumor)", "T"),
   nStage: col("N (Nodes)", "N"),
@@ -31,7 +31,9 @@ const FIELD = {
   address1: col("Related Address 1"),
   address2: col("Related Address 2"),
   address3: col("Related Address 3"),
-  addressGroup: col("Related Address 3", "Related Address 2")
+  addressGroup: col("Related Address 3", "Related Address 2"),
+  occupation: col("Occupation"),
+  grade: col("Grade")
 };
 
 const ADMIN_SECTIONS = [
@@ -130,6 +132,7 @@ const KURDISH_COLUMNS = {
   "Behavior code of tumor": "کۆدی ڕەفتاری توومەر",
   "Behavior Description": "وەسفی ڕەفتاری توومەر",
   "Extent of disease (umor extension)": "ئاستی پەرەسەندنی نەخۆشی",
+  "Extent of disease (tumor extension)": "ئاستی پەرەسەندنی نەخۆشی",
   "Laterality of primary site": "لایەنی شوێنی سەرەکی",
   "Laterality Description": "وەسفی لایەنی شوێن",
   T: "T",
@@ -152,7 +155,9 @@ const KURDISH_COLUMNS = {
   "Address (residence)": "کۆدی نیشتەجێبوون",
   "Related Address 1": "ناونیشانی پەیوەندیدار ١",
   "Related Address 2": "ناونیشانی پەیوەندیدار ٢",
-  "Related Address 3": "ناونیشانی پەیوەندیدار ٣"
+  "Related Address 3": "ناونیشانی پەیوەندیدار ٣",
+  Occupation: "پیشە",
+  Grade: "پلە"
 };
 
 const KURDISH_VALUES = {
@@ -262,6 +267,7 @@ const ARABIC_COLUMNS = {
   "Behavior code of tumor": "رمز سلوك الورم",
   "Behavior Description": "وصف سلوك الورم",
   "Extent of disease (umor extension)": "مدى انتشار المرض",
+  "Extent of disease (tumor extension)": "مدى انتشار المرض",
   "Laterality of primary site": "جانب الموقع الأساسي",
   "Laterality Description": "وصف جانب الموقع",
   T: "T",
@@ -284,7 +290,9 @@ const ARABIC_COLUMNS = {
   "Address (residence)": "رمز السكن",
   "Related Address 1": "العنوان المرتبط 1",
   "Related Address 2": "العنوان المرتبط 2",
-  "Related Address 3": "العنوان المرتبط 3"
+  "Related Address 3": "العنوان المرتبط 3",
+  Occupation: "المهنة",
+  Grade: "الدرجة"
 };
 
 const ARABIC_VALUES = {
@@ -400,7 +408,7 @@ const i18n = {
     globalStats: "Global Stats", prevention: "Prevention", admin: "Admin", filters: "Filters", reset: "Reset",
     search: "Search", searchNow: "Search", searchPlaceholder: "ID, address, morphology...", year: "Year", governorate: "Governorate",
     sex: "Sex", ageGroup: "Age Group", cancerSite: "Cancer Site", address: "Address Group",
-    reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2024", downloadPdf: "Download PDF", print: "Print", exportCsv: "Export CSV",
+    reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2025", downloadPdf: "Download PDF", print: "Print", exportCsv: "Export CSV",
     casesByYear: "Cases by Year", topCancerSites: "Top Cancer Sites", byGovernorate: "By Governorate",
     byAge: "By Age Group", allData: "All Filtered Data", prev: "Previous", next: "Next",
     refreshSources: "Check sources", officialSources: "Official Sources", preventionTitle: "How to reduce cancer risk",
@@ -421,7 +429,7 @@ const i18n = {
     globalStats: "ئاماری جیهانی", prevention: "خۆپاراستن", admin: "ئەدمین", filters: "فلتەرەکان", reset: "سڕینەوە",
     search: "گەڕان", searchNow: "گەڕان", searchPlaceholder: "ئایدی، ناونیشان، مۆرفۆلۆجی...", year: "ساڵ", governorate: "پارێزگا",
     sex: "ڕەگەز", ageGroup: "گروپی تەمەن", cancerSite: "شوێنی شێرپەنجە", address: "گروپی ناونیشان",
-    reportTitle: "ئاماری کەیسە تۆمارکراوەکانی شێرپەنجە لە هەرێمی کوردستان - عێراق، ٢٠٢٠-٢٠٢٤", downloadPdf: "داگرتنی PDF", print: "چاپکردن",
+    reportTitle: "ئاماری کەیسە تۆمارکراوەکانی شێرپەنجە لە هەرێمی کوردستان - عێراق، ٢٠٢٠-٢٠٢٥", downloadPdf: "داگرتنی PDF", print: "چاپکردن",
     exportCsv: "هەناردەی CSV", casesByYear: "کەیس بەپێی ساڵ", topCancerSites: "زۆرترین جۆرەکان",
     byGovernorate: "بەپێی پارێزگا", byAge: "بەپێی تەمەن", allData: "هەموو داتای فلتەرکراو",
     prev: "پێشوو", next: "دواتر", refreshSources: "پشکنینی سەرچاوەکان", officialSources: "سەرچاوە فەرمییەکان",
@@ -444,7 +452,7 @@ const i18n = {
     globalStats: "إحصاءات عالمية", prevention: "الوقاية", admin: "الإدارة", filters: "الفلاتر", reset: "إعادة",
     search: "بحث", searchNow: "بحث", searchPlaceholder: "المعرف، العنوان، المورفولوجيا...", year: "السنة", governorate: "المحافظة",
     sex: "الجنس", ageGroup: "الفئة العمرية", cancerSite: "موقع السرطان", address: "مجموعة العنوان",
-    reportTitle: "إحصاء حالات السرطان المسجلة في إقليم كردستان - العراق، 2020-2024", downloadPdf: "تنزيل PDF", print: "طباعة", exportCsv: "تصدير CSV",
+    reportTitle: "إحصاء حالات السرطان المسجلة في إقليم كردستان - العراق، 2020-2025", downloadPdf: "تنزيل PDF", print: "طباعة", exportCsv: "تصدير CSV",
     casesByYear: "الحالات حسب السنة", topCancerSites: "أكثر مواقع السرطان", byGovernorate: "حسب المحافظة",
     byAge: "حسب العمر", allData: "كل البيانات المفلترة", prev: "السابق", next: "التالي",
     refreshSources: "فحص المصادر", officialSources: "المصادر الرسمية", preventionTitle: "كيف تقلل خطر السرطان",

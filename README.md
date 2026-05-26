@@ -12,13 +12,13 @@ If the local server is not running, start it from this folder:
 
 Source workbook:
 
-`data/Cancer all 2020-2024.xlsx`
+`data/Cancer_2020_2025_Combined_Aligned.xlsx`
 
 Browser data copy:
 
 `data/cancer-data.js`
 
-The app loads 48,368 recorded cancer case rows from the 2020-2024 workbook.
+The app loads 58,863 recorded cancer case rows from the 2020-2025 workbook.
 
 ## Admin
 
