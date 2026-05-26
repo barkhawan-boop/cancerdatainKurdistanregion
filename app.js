@@ -52,8 +52,8 @@ const ADMIN_SECTIONS = [
   {
     titleKey: "tumorClassification",
     fields: [
-      FIELD.site,
       FIELD.specificSite,
+      FIELD.site,
       columnIndex["Topography code (primary tumor site)"],
       columnIndex["Secondary (grouped topography code)"],
       FIELD.morphology,
@@ -99,6 +99,7 @@ const DROPDOWN_FIELDS = new Set([
   FIELD.governorate,
   FIELD.sex,
   FIELD.ageGroup,
+  FIELD.specificSite,
   FIELD.site,
   FIELD.basis,
   FIELD.behavior,
@@ -251,7 +252,130 @@ const KURDISH_VALUES = {
   "M0: NO DISTANT METASTASIS": "M0: بڵاوبوونەوەی دوور نییە",
   "M1: DISTANT METASTASIS": "M1: بڵاوبوونەوەی دوور",
   "M3: DISTANT METASTASIS": "M3: بڵاوبوونەوەی دوور",
-  "NOT DOCUMENTED": "تۆمارنەکراو"
+  "NOT DOCUMENTED": "تۆمارنەکراو",
+  "ABDOMEN, NOS": "سک، دیارینەکراو",
+  "ACCESSORY SINUS, NOS": "ساینەسی یارمەتیدەر، دیارینەکراو",
+  "ACCESSORY SINUSES": "ساینەسە یارمەتیدەرەکان",
+  "ADRENAL GLAND, NOS": "غودەی سەرگورچیلە، دیارینەکراو",
+  "AMPULLA OF VATER": "ئەمپوڵای ڤاتەر",
+  "ANAL CANAL": "کەناڵی کۆم",
+  "ANTERIOR MEDIASTINUM": "ناوەڕاستی سنگی پێشەوە",
+  "ANTERIOR WALL OF BLADDER": "دیواری پێشەوەی میزدان",
+  "ANTERIOR WALL OF NASOPHARYNX": "دیواری پێشەوەی لووت و قوڕگ",
+  "ANUS AND ANAL CANAL": "کۆم و کەناڵی کۆم",
+  "ANUS, NOS": "کۆم، دیارینەکراو",
+  "AORTIC BODY": "تەنەی ئاۆرتا",
+  "AORTIC BODY AND OTHER PARAGANGLIA": "تەنەی ئاۆرتا و پاراگانگلیای تر",
+  "APEX OF BLADDER": "لووتکەی میزدان",
+  APPENDIX: "پاشکۆی ڕیخۆڵە",
+  "ASCENDING COLON": "کۆڵۆنی سەرەوەچوو",
+  "AUDITORY TUBE": "بۆری بیستن",
+  "AUTONOMIC NERVOUS SYSTEM, NOS": "سیستەمی دەمارە خۆکارەکان، دیارینەکراو",
+  "AXILLARY LYMPH NODES": "گرێ لیمفاوییەکانی ژێر باڵ",
+  "AXILLARY LYMPH NODES AND LYMPH NODES OF UPPER LIMB": "گرێ لیمفاوییەکانی ژێر باڵ و ئەندامی سەرەوە",
+  "AXILLARY TAIL OF BREAST": "درێژەی ژێر باڵی مەمک",
+  "BACK, NOS": "پشت، دیارینەکراو",
+  "BASE OF TONGUE": "بنکەی زمان",
+  "BASE OF TONGUE, NOS": "بنکەی زمان، دیارینەکراو",
+  "BILIARY TRACT, NOS": "ڕێڕەوی زەرداو، دیارینەکراو",
+  "BILLIARY TRACT, NOS": "ڕێڕەوی زەرداو، دیارینەکراو",
+  "BLADDER, NOS": "میزدان، دیارینەکراو",
+  "BODY OF PANCREAS": "تەنەی پانکریاس",
+  "BONE MARROW": "مێشکی ئێسک",
+  "BONE OF LIMB, NOS": "ئێسکی ئەندام، دیارینەکراو",
+  "BONE, NOS": "ئێسک، دیارینەکراو",
+  "BONES OF SKULL AND FACE": "ئێسکەکانی کاسەسەر و ڕوو",
+  "BONES OF SKULL AND FACE AND ASSOCIATED JOINTS": "ئێسکەکانی کاسەسەر و ڕوو و جومگە پەیوەندیدارەکان",
+  "BONES OF UPPER LIMB, NOS": "ئێسکەکانی ئەندامی سەرەوە، دیارینەکراو",
+  "BORDER OF TONGUE": "لێواری زمان",
+  "BRAIN STEM": "ساقی مێشک",
+  "BRAIN, NOS": "مێشک، دیارینەکراو",
+  "BREAST, NOS": "مەمک، دیارینەکراو",
+  "BROAD LIGAMENT": "پەیوەندی پان",
+  "CARDIA, NOS": "کاردیا، دیارینەکراو",
+  "CAROTID BODY": "تەنەی کارۆتید",
+  "CECUM": "سیکەم",
+  "CERVIX UTERI": "ملی منداڵدان",
+  "CERVIX UTERI, NOS": "ملی منداڵدان، دیارینەکراو",
+  "COLON, NOS": "کۆڵۆن، دیارینەکراو",
+  "CORPUS UTERI": "تەنەی منداڵدان",
+  "DESCENDING COLON": "کۆڵۆنی خوارەوەچوو",
+  DUODENUM: "دوانزەگرێ",
+  ENDOMETRIUM: "ناوپۆشی منداڵدان",
+  "ENDOCRINE GLAND, NOS": "غودەی ناوخۆیی، دیارینەکراو",
+  "ESOPHAGUS, NOS": "سوڕێنچک، دیارینەکراو",
+  "FRONTAL LOBE": "بەشی پێشەوەی مێشک",
+  GALLBLADDER: "کیسی زەرداو",
+  GLOTTIS: "گڵۆتیس",
+  "HEAD OF PANCREAS": "سەری پانکریاس",
+  "INGUINAL LYMPH NODES": "گرێ لیمفاوییەکانی ناوچەی قولە",
+  "INTRA-ABDOMINAL LYMPH NODES": "گرێ لیمفاوییەکانی ناوسک",
+  "INTRAHEPATIC BILE DUCT": "ڕێڕەوی زەرداوی ناو جگە",
+  "INTRATHORACIC LYMPH NODES": "گرێ لیمفاوییەکانی ناو سنگ",
+  "KIDNEY, NOS": "گورچیلە، دیارینەکراو",
+  LARYNX: "قوڕگی دەنگ",
+  "LARYNX, NOS": "قوڕگی دەنگ، دیارینەکراو",
+  "LIVER": "جگە",
+  "LONG BONES OF LOWER LIMB": "ئێسکە درێژەکانی ئەندامی خوارەوە",
+  "LONG BONES OF UPPER LIMB": "ئێسکە درێژەکانی ئەندامی سەرەوە",
+  "LOWER THIRD OF ESOPHAGUS": "سێیەکی خوارەوەی سوڕێنچک",
+  "LUNG, NOS": "سییەکان، دیارینەکراو",
+  "LYMPH NODE, NOS": "گرێی لیمفاوی، دیارینەکراو",
+  "LYMPH NODES OF HEAD, FACE AND NECK": "گرێ لیمفاوییەکانی سەر و ڕوو و مل",
+  "LYMPH NODES OF MULTIPLE REGIONS": "گرێ لیمفاوییەکانی چەند ناوچە",
+  "MAIN BRONCHUS": "بڕۆنکی سەرەکی",
+  "MEDIASTINUM, NOS": "ناوەڕاستی سنگ، دیارینەکراو",
+  "MOUTH, NOS": "دەم، دیارینەکراو",
+  "NASAL CAVITY": "بۆشایی لووت",
+  "NASOPHARYNX, NOS": "لووت و قوڕگ، دیارینەکراو",
+  "OROPHARYNX, NOS": "دەم و قوڕگ، دیارینەکراو",
+  OVARY: "هێلکەدان",
+  "OVERLAPPING LESION OF BRAIN": "بریتی هاوبەشی مێشک",
+  "OVERLAPPING LESION OF SKIN": "بریتی هاوبەشی پێست",
+  "PANCREAS, NOS": "پانکریاس، دیارینەکراو",
+  "PARIETAL LOBE": "بەشی سەرەوەی مێشک",
+  "PAROTID GLAND": "غودەی پارۆتید",
+  "PELVIC BONES": "ئێسکەکانی حەوز",
+  "PLACENTA": "جێرە",
+  "PLEURA, NOS": "پەردەی سی، دیارینەکراو",
+  "PROSTATE GLAND": "غودەی پرۆستات",
+  "RECTOSIGMOID JUNCTION": "بەستەری ڕێکتەم و سیگمۆید",
+  "RECTUM, NOS": "ڕێکتەم، دیارینەکراو",
+  "RENAL PELVIS": "حەوزی گورچیلە",
+  RETINA: "تۆڕی چاو",
+  RETROPERITONEUM: "پشتی پەردەی ناوسک",
+  "SALIVARY GLAND, NOS": "غودەی شڵەی دەم، دیارینەکراو",
+  "SIGMOID COLON": "کۆڵۆنی سیگمۆید",
+  "SKIN OF EAR": "پێستی گوێ",
+  "SKIN OF EYELID": "پێستی پەپکەی چاو",
+  "SKIN OF FACE": "پێستی ڕوو",
+  "SKIN OF LIP": "پێستی لێو",
+  "SKIN OF LOWER LIMB": "پێستی ئەندامی خوارەوە",
+  "SKIN OF OTHER AND UNSPECIFIED PARTS OF FACE": "پێستی بەشەکانی تری ڕوو",
+  "SKIN OF SCALP AND NECK": "پێستی سەر و مل",
+  "SKIN OF TRUNK": "پێستی لاشە",
+  "SKIN OF UPPER LIMB": "پێستی ئەندامی سەرەوە",
+  "SKIN, NOS": "پێست، دیارینەکراو",
+  "SMALL INTESTINE, NOS": "ڕیخۆڵەی بچووک، دیارینەکراو",
+  "SOFT TISSUE OF ABDOMEN": "خانەی نەرمەی سک",
+  "SOFT TISSUE OF HEAD, FACE AND NECK": "خانەی نەرمەی سەر و ڕوو و مل",
+  "SOFT TISSUE OF LOWER LIMB": "خانەی نەرمەی ئەندامی خوارەوە",
+  "SOFT TISSUE OF PELVIS": "خانەی نەرمەی حەوز",
+  "SOFT TISSUE OF THORAX": "خانەی نەرمەی سنگ",
+  "SOFT TISSUE OF UPPER LIMB": "خانەی نەرمەی ئەندامی سەرەوە",
+  "SOFT TISSUE, NOS": "خانەی نەرمە، دیارینەکراو",
+  "SPINAL CORD": "مێشکی پشتی",
+  "STOMACH, NOS": "گەدە، دیارینەکراو",
+  SUPRAGLOTTIS: "سەرگڵۆتیس",
+  "TEMPORAL LOBE": "بەشی کاتی مێشک",
+  "TESTIS, NOS": "گوێزە، دیارینەکراو",
+  "THORAX, NOS": "سنگ، دیارینەکراو",
+  "THYROID GLAND": "غودەی دەرەقی",
+  "TONGUE, NOS": "زمان، دیارینەکراو",
+  "UNKNOWN PRIMARY SITE": "شوێنی سەرەکی نادیار",
+  "UTERUS, NOS": "منداڵدان، دیارینەکراو",
+  "VENTRICLE, NOS": "ڤێنتریکڵ، دیارینەکراو",
+  "VULVA, NOS": "ڤولڤا، دیارینەکراو"
 };
 
 const ARABIC_COLUMNS = {
@@ -665,7 +789,7 @@ function populateFilters() {
   fillSelect("governorateFilter", FIELD.governorate);
   fillSelect("sexFilter", FIELD.sex);
   fillSelect("ageGroupFilter", FIELD.ageGroup);
-  fillSelect("siteFilter", FIELD.site);
+  fillSelect("siteFilter", FIELD.specificSite);
   fillSelect("addressFilter", FIELD.addressGroup);
 }
 
@@ -688,7 +812,7 @@ function applyFilters() {
     if (f.governorate && optionValue(row[FIELD.governorate]) !== f.governorate) return false;
     if (f.sex && optionValue(row[FIELD.sex]) !== f.sex) return false;
     if (f.ageGroup && optionValue(row[FIELD.ageGroup]) !== f.ageGroup) return false;
-    if (f.site && optionValue(row[FIELD.site]) !== f.site) return false;
+    if (f.site && optionValue(row[FIELD.specificSite]) !== f.site) return false;
     if (f.address && optionValue(row[FIELD.addressGroup]) !== f.address) return false;
     if (f.q && !row.some((value, index) => {
       const raw = String(value ?? "").toLowerCase();
@@ -716,14 +840,14 @@ function countMeaningfulBy(rows, index) {
 
 function renderKpis() {
   const total = filteredRows.length;
-  const topSite = countMeaningfulBy(filteredRows, FIELD.site)[0] || ["-", 0];
+  const topSite = countMeaningfulBy(filteredRows, FIELD.specificSite)[0] || ["-", 0];
   const female = filteredRows.filter(row => String(row[FIELD.sex]).toLowerCase() === "female").length;
   const male = filteredRows.filter(row => String(row[FIELD.sex]).toLowerCase() === "male").length;
   const ages = filteredRows.map(row => Number(row[FIELD.age])).filter(Number.isFinite);
   const avgAge = ages.length ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : "-";
   const items = [
     [formatNumber(total), t("totalCases")],
-    [displayFieldValue(FIELD.site, topSite[0]), `${t("topSite")} (${formatNumber(topSite[1])})`],
+    [displayFieldValue(FIELD.specificSite, topSite[0]), `${t("topSite")} (${formatNumber(topSite[1])})`],
     [avgAge, t("averageAge")],
     [`${formatNumber(female)} / ${formatNumber(male)}`, t("femaleMale")]
   ];
@@ -746,7 +870,7 @@ function renderBarChart(id, entries, limit = 8, valueIndex = null) {
 
 function renderCharts() {
   renderBarChart("yearChart", countBy(filteredRows, FIELD.year).sort((a, b) => String(a[0]).localeCompare(String(b[0]), undefined, { numeric: true })), 6, FIELD.year);
-  renderBarChart("siteChart", countMeaningfulBy(filteredRows, FIELD.site), 10, FIELD.site);
+  renderBarChart("siteChart", countMeaningfulBy(filteredRows, FIELD.specificSite), 10, FIELD.specificSite);
   renderBarChart("governorateChart", countBy(filteredRows, FIELD.governorate), 6, FIELD.governorate);
   renderBarChart("ageChart", countBy(filteredRows, FIELD.ageGroup), 10, FIELD.ageGroup);
 }
@@ -929,7 +1053,7 @@ function buildReport(rows, maxRows = rows.length) {
     governorate: FIELD.governorate,
     sex: FIELD.sex,
     ageGroup: FIELD.ageGroup,
-    site: FIELD.site,
+    site: FIELD.specificSite,
     address: FIELD.addressGroup
   };
   const filters = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
@@ -937,7 +1061,7 @@ function buildReport(rows, maxRows = rows.length) {
     const shown = key === "q" ? value : displayFieldValue(filterLabels[key], value);
     return `${label}: ${shown}`;
   }).join(" | ") || t("all");
-  const topSites = countBy(rows, FIELD.site).slice(0, 8);
+  const topSites = countBy(rows, FIELD.specificSite).slice(0, 8);
   return `
     <article class="print-report">
       <h1>${t("appTitle")}</h1>
@@ -946,7 +1070,7 @@ function buildReport(rows, maxRows = rows.length) {
       <p><strong>${t("totalCases")}:</strong> ${formatNumber(rows.length)}</p>
       <h2>${t("topCancerSites")}</h2>
       <table><thead><tr><th>${t("cancerSite")}</th><th>${t("rows")}</th></tr></thead><tbody>
-        ${topSites.map(([site, count]) => `<tr><td>${escapeHtml(displayFieldValue(FIELD.site, site))}</td><td>${formatNumber(count)}</td></tr>`).join("")}
+        ${topSites.map(([site, count]) => `<tr><td>${escapeHtml(displayFieldValue(FIELD.specificSite, site))}</td><td>${formatNumber(count)}</td></tr>`).join("")}
       </tbody></table>
       <h2>${t("allData")}</h2>
       ${rows.length > maxRows ? `<p>${escapeHtml(t("pdfLimit"))} Showing ${formatNumber(maxRows)} of ${formatNumber(rows.length)} rows.</p>` : ""}
@@ -963,7 +1087,7 @@ async function downloadPdf() {
 
 function buildPdfPayload() {
   const rowsForPdf = filteredRows.slice(0, 1500);
-  const topSite = countMeaningfulBy(filteredRows, FIELD.site)[0] || ["-", 0];
+  const topSite = countMeaningfulBy(filteredRows, FIELD.specificSite)[0] || ["-", 0];
   const ages = filteredRows.map(row => Number(row[FIELD.age])).filter(Number.isFinite);
   const avgAge = ages.length ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : "-";
   return {
@@ -976,7 +1100,7 @@ function buildPdfPayload() {
     rows: rowsForPdf.map(row => row.map((value, index) => displayFieldValue(index, value))),
     summary: [
       { label: t("totalCases"), value: formatNumber(filteredRows.length) },
-      { label: t("topSite"), value: `${displayFieldValue(FIELD.site, topSite[0])} (${formatNumber(topSite[1])})` },
+      { label: t("topSite"), value: `${displayFieldValue(FIELD.specificSite, topSite[0])} (${formatNumber(topSite[1])})` },
       { label: t("averageAge"), value: avgAge },
       { label: t("femaleMale"), value: document.querySelector(".kpi:nth-child(4) strong")?.textContent || "" }
     ]
@@ -990,7 +1114,7 @@ function buildFilterText() {
     governorate: FIELD.governorate,
     sex: FIELD.sex,
     ageGroup: FIELD.ageGroup,
-    site: FIELD.site,
+    site: FIELD.specificSite,
     address: FIELD.addressGroup
   };
   const parts = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
