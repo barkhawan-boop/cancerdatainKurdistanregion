@@ -12,7 +12,7 @@ If the local server is not running, start it from this folder:
 
 Source workbook:
 
-`data/Cancer_2020_2025_Combined_Aligned.xlsx`
+`data/Cancer_2020_2025_Combined_Clean.xlsx`
 
 Browser data copy:
 

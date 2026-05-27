@@ -28,10 +28,10 @@ const FIELD = {
   age: col("Age at diagnosis"),
   ageGroup: col("Age Groups"),
   nationality: col("Nationality"),
-  address1: col("Related Address 1"),
-  address2: col("Related Address 2"),
+  address1: col("Address (cities)", "Related Address 1"),
+  address2: col("Address (districts)", "Related Address 2"),
   address3: col("Related Address 3"),
-  addressGroup: col("Related Address 3", "Related Address 2"),
+  addressGroup: col("Address (cities)", "Related Address 3", "Related Address 2"),
   occupation: col("Occupation"),
   grade: col("Grade")
 };
@@ -86,10 +86,10 @@ const ADMIN_SECTIONS = [
   {
     titleKey: "addressInfo",
     fields: [
-      columnIndex["Address (residence)"],
       FIELD.address1,
       FIELD.address2,
-      FIELD.address3
+      FIELD.address3,
+      FIELD.occupation
     ]
   }
 ];
@@ -116,6 +116,7 @@ const DROPDOWN_FIELDS = new Set([
   FIELD.targeted,
   FIELD.family,
   FIELD.nationality,
+  FIELD.address1,
   FIELD.address2,
   FIELD.address3
 ]);
@@ -154,6 +155,8 @@ const KURDISH_COLUMNS = {
   "Age Groups": "گروپی تەمەن",
   Nationality: "نەتەوە",
   "Address (residence)": "کۆدی نیشتەجێبوون",
+  "Address (cities)": "شار/پارێزگای نیشتەجێبوون",
+  "Address (districts)": "قەزا/ناحیەی نیشتەجێبوون",
   "Related Address 1": "ناونیشانی پەیوەندیدار ١",
   "Related Address 2": "ناونیشانی پەیوەندیدار ٢",
   "Related Address 3": "ناونیشانی پەیوەندیدار ٣",
@@ -412,6 +415,8 @@ const ARABIC_COLUMNS = {
   "Age Groups": "الفئة العمرية",
   Nationality: "الجنسية",
   "Address (residence)": "رمز السكن",
+  "Address (cities)": "مدينة/محافظة السكن",
+  "Address (districts)": "القضاء/الناحية",
   "Related Address 1": "العنوان المرتبط 1",
   "Related Address 2": "العنوان المرتبط 2",
   "Related Address 3": "العنوان المرتبط 3",
