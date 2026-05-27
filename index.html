@@ -7,9 +7,9 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Kurdistan Cancer Data Report 2020-2025</title>
-  <link rel="stylesheet" href="styles.css?v=20260527-1">
-  <script defer src="data/cancer-data.js?v=20260527-1"></script>
-  <script defer src="app.js?v=20260527-1"></script>
+  <link rel="stylesheet" href="styles.css?v=20260527-2">
+  <script defer src="data/cancer-data.js?v=20260527-2"></script>
+  <script defer src="app.js?v=20260527-2"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -77,17 +77,6 @@
       <header class="topbar">
         <div>
           <h2 data-i18n="reportTitle">Recorded cancer cases, 2020-2025</h2>
-        </div>
-        <div class="actions">
-          <button class="icon-btn" id="downloadPdfBtn" title="Download PDF">
-            <span class="icon">PDF</span><span data-i18n="downloadPdf">Download PDF</span>
-          </button>
-          <button class="icon-btn" id="printBtn" title="Print">
-            <span class="icon">PR</span><span data-i18n="print">Print</span>
-          </button>
-          <button class="icon-btn" id="exportCsvBtn" title="Export CSV">
-            <span class="icon">CSV</span><span data-i18n="exportCsv">Export CSV</span>
-          </button>
         </div>
       </header>
 
@@ -191,7 +180,6 @@
             <h3 data-i18n="manageCases">Manage cases</h3>
             <div class="table-tools">
               <button class="text-btn" id="newCaseBtn" data-i18n="newCase">New Case</button>
-              <button class="text-btn" id="saveEditsBtn" data-i18n="saveEdits">Export Edits</button>
               <button class="text-btn danger" id="logoutBtn" data-i18n="logout">Logout</button>
             </div>
           </div>
@@ -205,7 +193,6 @@
         </section>
       </section>
 
-      <section id="printArea" class="print-area" aria-hidden="true"></section>
     </main>
   </div>
 </body>

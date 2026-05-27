@@ -532,17 +532,16 @@ const i18n = {
     globalStats: "Global Stats", prevention: "Prevention", admin: "Admin", filters: "Filters", reset: "Reset",
     search: "Search", searchNow: "Search", searchPlaceholder: "ID, address, morphology...", year: "Year", governorate: "Governorate",
     sex: "Sex", ageGroup: "Age Group", cancerSite: "Cancer Site", address: "Address Group",
-    reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2025", downloadPdf: "Download PDF", print: "Print", exportCsv: "Export CSV",
+    reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2025",
     casesByYear: "Cases by Year", topCancerSites: "Top Cancer Sites", byGovernorate: "By Governorate",
     byAge: "By Age Group", allData: "All Filtered Data", prev: "Previous", next: "Next",
     refreshSources: "Check sources", officialSources: "Official Sources", preventionTitle: "How to reduce cancer risk",
     iraqReasons: "Main cancer risk drivers in Iraq", adminLogin: "Admin Login", username: "Username", password: "Password",
     login: "Login", localAdminNote: "Admin credentials are private. Changes are saved in this browser.",
-    manageCases: "Manage cases", newCase: "New Case", saveEdits: "Export Edits", logout: "Logout", saveCase: "Save Case",
+    manageCases: "Manage cases", newCase: "New Case", logout: "Logout", saveCase: "Save Case",
     deleteCase: "Delete Case", clearForm: "Clear", adminHint: "Select any row in the Cases table to edit it here.",
     totalCases: "Filtered cases", topSite: "Top site", averageAge: "Average age", femaleMale: "Female / Male",
     all: "All", page: "Page", of: "of", rows: "rows", noData: "No matching records", lastChecked: "Last checked",
-    pdfLimit: "PDF includes summary and first rows for performance. Use Print for complete filtered rows.",
     sourceChecked: "Official links checked from this browser. Live figures should be confirmed from the source pages.",
     sourceBlocked: "The browser could not check all sources automatically; source links remain available below.",
     basicCaseInfo: "Basic case info", tumorClassification: "Tumor classification", stageDisease: "Stage and disease",
@@ -553,19 +552,18 @@ const i18n = {
     globalStats: "ئاماری جیهانی", prevention: "خۆپاراستن", admin: "ئەدمین", filters: "فلتەرەکان", reset: "سڕینەوە",
     search: "گەڕان", searchNow: "گەڕان", searchPlaceholder: "ئایدی، ناونیشان، مۆرفۆلۆجی...", year: "ساڵ", governorate: "پارێزگا",
     sex: "ڕەگەز", ageGroup: "گروپی تەمەن", cancerSite: "شوێنی شێرپەنجە", address: "گروپی ناونیشان",
-    reportTitle: "ئاماری کەیسە تۆمارکراوەکانی شێرپەنجە لە هەرێمی کوردستان - عێراق، ٢٠٢٠-٢٠٢٥", downloadPdf: "داگرتنی PDF", print: "چاپکردن",
-    exportCsv: "هەناردەی CSV", casesByYear: "کەیس بەپێی ساڵ", topCancerSites: "زۆرترین جۆرەکان",
+    reportTitle: "ئاماری کەیسە تۆمارکراوەکانی شێرپەنجە لە هەرێمی کوردستان - عێراق، ٢٠٢٠-٢٠٢٥",
+    casesByYear: "کەیس بەپێی ساڵ", topCancerSites: "زۆرترین جۆرەکان",
     byGovernorate: "بەپێی پارێزگا", byAge: "بەپێی تەمەن", allData: "هەموو داتای فلتەرکراو",
     prev: "پێشوو", next: "دواتر", refreshSources: "پشکنینی سەرچاوەکان", officialSources: "سەرچاوە فەرمییەکان",
     preventionTitle: "چۆن مەترسی شێرپەنجە کەم بکەیتەوە", iraqReasons: "هۆکارە سەرەکییەکانی مەترسی لە عێراق",
     adminLogin: "چوونەژوورەوەی ئەدمین", username: "ناوی بەکارهێنەر", password: "وشەی نهێنی", login: "چوونەژوورەوە",
     localAdminNote: "زانیاری چوونەژوورەوەی ئەدمین نهێنییە. گۆڕانکارییەکان لەم وێبگەڕەدا دەپارێزرێن.",
-    manageCases: "بەڕێوەبردنی کەیسەکان", newCase: "کەیسی نوێ", saveEdits: "هەناردەی گۆڕانکاری", logout: "چوونەدەرەوە",
+    manageCases: "بەڕێوەبردنی کەیسەکان", newCase: "کەیسی نوێ", logout: "چوونەدەرەوە",
     saveCase: "پاشەکەوتکردنی کەیس", deleteCase: "سڕینەوەی کەیس", clearForm: "پاککردنەوە",
     adminHint: "هەر ڕیزێک لە خشتەی کەیسەکان هەڵبژێرە بۆ دەستکاریکردن.",
     totalCases: "کەیسە فلتەرکراوەکان", topSite: "زۆرترین شوێن", averageAge: "ناوەندی تەمەن", femaleMale: "مێ / نێر",
     all: "هەموو", page: "لاپەڕە", of: "لە", rows: "ڕیز", noData: "هیچ تۆمارێک نەدۆزرایەوە", lastChecked: "دوایین پشکنین",
-    pdfLimit: "PDF پوختە و ڕیزە سەرەتاییەکان دەگرێتەوە. بۆ هەموو ڕیزە فلتەرکراوەکان چاپ بەکاربهێنە.",
     sourceChecked: "بەستەرە فەرمییەکان لەم وێبگەڕەوە پشکنران. ژمارەی زیندوو لە پەڕەی سەرچاوەدا بسەلمێنە.",
     sourceBlocked: "وێبگەڕەکە نەیتوانی هەموو سەرچاوەکان ئۆتۆماتیکی بپشکنێت؛ بەستەرەکان لە خوارەوەن.",
     basicCaseInfo: "زانیاری بنەڕەتی کەیس", tumorClassification: "پۆلێنکردنی توومەر", stageDisease: "قۆناغ و پەرەسەندنی نەخۆشی",
@@ -576,18 +574,17 @@ const i18n = {
     globalStats: "إحصاءات عالمية", prevention: "الوقاية", admin: "الإدارة", filters: "الفلاتر", reset: "إعادة",
     search: "بحث", searchNow: "بحث", searchPlaceholder: "المعرف، العنوان، المورفولوجيا...", year: "السنة", governorate: "المحافظة",
     sex: "الجنس", ageGroup: "الفئة العمرية", cancerSite: "موقع السرطان", address: "مجموعة العنوان",
-    reportTitle: "إحصاء حالات السرطان المسجلة في إقليم كردستان - العراق، 2020-2025", downloadPdf: "تنزيل PDF", print: "طباعة", exportCsv: "تصدير CSV",
+    reportTitle: "إحصاء حالات السرطان المسجلة في إقليم كردستان - العراق، 2020-2025",
     casesByYear: "الحالات حسب السنة", topCancerSites: "أكثر مواقع السرطان", byGovernorate: "حسب المحافظة",
     byAge: "حسب العمر", allData: "كل البيانات المفلترة", prev: "السابق", next: "التالي",
     refreshSources: "فحص المصادر", officialSources: "المصادر الرسمية", preventionTitle: "كيف تقلل خطر السرطان",
     iraqReasons: "أهم عوامل الخطر في العراق", adminLogin: "تسجيل دخول الإدارة", username: "اسم المستخدم",
     password: "كلمة المرور", login: "دخول", localAdminNote: "بيانات دخول الإدارة خاصة. تحفظ التغييرات في هذا المتصفح.",
-    manageCases: "إدارة الحالات", newCase: "حالة جديدة", saveEdits: "تصدير التعديلات", logout: "خروج",
+    manageCases: "إدارة الحالات", newCase: "حالة جديدة", logout: "خروج",
     saveCase: "حفظ الحالة", deleteCase: "حذف الحالة", clearForm: "مسح",
     adminHint: "اختر أي صف من جدول الحالات لتعديله هنا.", totalCases: "الحالات المفلترة", topSite: "أكثر موقع",
     averageAge: "متوسط العمر", femaleMale: "إناث / ذكور", all: "الكل", page: "صفحة", of: "من", rows: "صفوف",
     noData: "لا توجد سجلات مطابقة", lastChecked: "آخر فحص",
-    pdfLimit: "يتضمن PDF الملخص والصفوف الأولى للأداء. استخدم الطباعة لكل الصفوف المفلترة.",
     sourceChecked: "تم فحص الروابط الرسمية من هذا المتصفح. يجب تأكيد الأرقام الحية من صفحات المصدر.",
     sourceBlocked: "تعذر فحص كل المصادر تلقائيا؛ الروابط الرسمية متاحة أدناه.",
     basicCaseInfo: "معلومات الحالة الأساسية", tumorClassification: "تصنيف الورم", stageDisease: "المرحلة وانتشار المرض",
@@ -1045,125 +1042,11 @@ function renderAll() {
   renderAdvice();
 }
 
-function buildReport(rows, maxRows = rows.length) {
-  const f = getFilterValues();
-  const shown = rows.slice(0, maxRows);
-  const filterLabels = {
-    year: FIELD.year,
-    governorate: FIELD.governorate,
-    sex: FIELD.sex,
-    ageGroup: FIELD.ageGroup,
-    site: FIELD.specificSite,
-    address: FIELD.addressGroup
-  };
-  const filters = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
-    const label = key === "q" ? t("search") : key === "address" ? t("address") : displayColumnName(COLUMNS[filterLabels[key]]);
-    const shown = key === "q" ? value : displayFieldValue(filterLabels[key], value);
-    return `${label}: ${shown}`;
-  }).join(" | ") || t("all");
-  const topSites = countBy(rows, FIELD.specificSite).slice(0, 8);
-  return `
-    <article class="print-report">
-      <h1>${t("appTitle")}</h1>
-      <p>${t("reportTitle")}</p>
-      <p><strong>${t("filters")}:</strong> ${escapeHtml(filters)}</p>
-      <p><strong>${t("totalCases")}:</strong> ${formatNumber(rows.length)}</p>
-      <h2>${t("topCancerSites")}</h2>
-      <table><thead><tr><th>${t("cancerSite")}</th><th>${t("rows")}</th></tr></thead><tbody>
-        ${topSites.map(([site, count]) => `<tr><td>${escapeHtml(displayFieldValue(FIELD.specificSite, site))}</td><td>${formatNumber(count)}</td></tr>`).join("")}
-      </tbody></table>
-      <h2>${t("allData")}</h2>
-      ${rows.length > maxRows ? `<p>${escapeHtml(t("pdfLimit"))} Showing ${formatNumber(maxRows)} of ${formatNumber(rows.length)} rows.</p>` : ""}
-      <table><thead><tr>${COLUMNS.map(col => `<th>${escapeHtml(displayColumnName(col))}</th>`).join("")}</tr></thead><tbody>
-        ${shown.map(row => `<tr>${row.map((value, index) => `<td>${escapeHtml(displayFieldValue(index, value))}</td>`).join("")}</tr>`).join("")}
-      </tbody></table>
-    </article>
-  `;
-}
-
-async function downloadPdf() {
-  printReport();
-}
-
-function buildPdfPayload() {
-  const rowsForPdf = filteredRows.slice(0, 1500);
-  const topSite = countMeaningfulBy(filteredRows, FIELD.specificSite)[0] || ["-", 0];
-  const ages = filteredRows.map(row => Number(row[FIELD.age])).filter(Number.isFinite);
-  const avgAge = ages.length ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : "-";
-  return {
-    title: t("appTitle"),
-    subtitle: t("reportTitle"),
-    filters: buildFilterText(),
-    totalRows: filteredRows.length,
-    lang,
-    columns: COLUMNS.map(displayColumnName),
-    rows: rowsForPdf.map(row => row.map((value, index) => displayFieldValue(index, value))),
-    summary: [
-      { label: t("totalCases"), value: formatNumber(filteredRows.length) },
-      { label: t("topSite"), value: `${displayFieldValue(FIELD.specificSite, topSite[0])} (${formatNumber(topSite[1])})` },
-      { label: t("averageAge"), value: avgAge },
-      { label: t("femaleMale"), value: document.querySelector(".kpi:nth-child(4) strong")?.textContent || "" }
-    ]
-  };
-}
-
-function buildFilterText() {
-  const f = getFilterValues();
-  const filterLabels = {
-    year: FIELD.year,
-    governorate: FIELD.governorate,
-    sex: FIELD.sex,
-    ageGroup: FIELD.ageGroup,
-    site: FIELD.specificSite,
-    address: FIELD.addressGroup
-  };
-  const parts = Object.entries(f).filter(([, value]) => value).map(([key, value]) => {
-    const label = key === "q" ? t("search") : key === "address" ? t("address") : displayColumnName(COLUMNS[filterLabels[key]]);
-    const shown = key === "q" ? value : displayFieldValue(filterLabels[key], value);
-    return `${label}: ${shown}`;
-  });
-  return parts.length ? `${t("filters")}: ${parts.join(" | ")}` : `${t("filters")}: ${t("all")}`;
-}
-
-function printReport() {
-  const printArea = document.getElementById("printArea");
-  printArea.innerHTML = buildReport(filteredRows, filteredRows.length);
-  printArea.setAttribute("aria-hidden", "false");
-  window.print();
-  setTimeout(() => printArea.setAttribute("aria-hidden", "true"), 500);
-}
-
-function exportCsv() {
-  const csv = [COLUMNS, ...filteredRows].map(row => row.map(csvCell).join(",")).join("\n");
-  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `cancer-data-${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function csvCell(value) {
-  const text = String(value ?? "");
-  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-}
-
 async function checkSources() {
   const checks = await Promise.allSettled(officialSources.map(source => fetch(source.url, { mode: "no-cors", cache: "no-store" })));
   const ok = checks.some(result => result.status === "fulfilled");
   const stamp = `${t("lastChecked")}: ${new Date().toLocaleString()}`;
   document.getElementById("sourceStatus").textContent = `${stamp}. ${ok ? t("sourceChecked") : t("sourceBlocked")}`;
-}
-
-function exportEdits() {
-  const blob = new Blob([JSON.stringify(edits, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `cancer-admin-edits-${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 function escapeHtml(value) {
@@ -1220,9 +1103,6 @@ function bindEvents() {
     page = Math.min(Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE)), page + 1);
     renderTable();
   });
-  document.getElementById("downloadPdfBtn").addEventListener("click", downloadPdf);
-  document.getElementById("printBtn").addEventListener("click", printReport);
-  document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
   document.getElementById("refreshSources").addEventListener("click", checkSources);
   document.getElementById("loginForm").addEventListener("submit", event => {
     event.preventDefault();
@@ -1235,7 +1115,6 @@ function bindEvents() {
   document.getElementById("saveCaseBtn").addEventListener("click", saveCaseFromForm);
   document.getElementById("deleteCaseBtn").addEventListener("click", deleteSelectedCase);
   document.getElementById("clearFormBtn").addEventListener("click", () => renderAdminForm());
-  document.getElementById("saveEditsBtn").addEventListener("click", exportEdits);
   document.getElementById("logoutBtn").addEventListener("click", () => {
     isAdmin = false;
     document.getElementById("loginPanel").classList.remove("is-hidden");

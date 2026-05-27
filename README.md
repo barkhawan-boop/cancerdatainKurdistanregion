@@ -26,13 +26,11 @@ Default login:
 
 `Admin / Admin123`
 
-Admin changes are saved in the current browser storage. Use **Export Edits** to save a JSON backup of added, updated, and deleted records.
+Admin changes are saved in the current browser storage.
 
-## PDF and Print
+## Public Use
 
-Use **Download PDF** for a clean report export. The app opens the browser print dialog with a PDF-ready report layout; choose **Save as PDF**. This works after upload because the needed fonts are bundled in `fonts/`.
-
-Use **Print** to print all currently filtered rows. Clear filters first to print all records.
+The public app is for viewing, filtering, and reading summary information only. Public PDF download, print, and CSV/data export controls are intentionally disabled.
 
 ## Official Source Panel
 
