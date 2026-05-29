@@ -172,6 +172,16 @@ button {
   border-top: 1px solid rgba(255,255,255,.15);
 }
 
+.filter-group-title {
+  margin-top: 4px;
+  padding-top: 4px;
+  color: #b9dfdb;
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
 .panel-title {
   display: flex;
   align-items: center;
@@ -286,6 +296,36 @@ button {
 
 .filter-action:hover {
   background: #dff4f1;
+}
+
+.sub-filters {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.15);
+}
+
+.sub-filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sub-filter-title h3 {
+  margin: 0;
+  color: #f7fffd;
+  font-size: .96rem;
+}
+
+.sub-filter-title .text-btn {
+  color: #dff4f1;
+}
+
+.sub-filter-grid {
+  display: grid;
+  gap: 10px;
 }
 
 .icon {
@@ -559,6 +599,10 @@ tbody tr:hover {
   }
 
   .filters-panel .panel-title {
+    grid-column: 1 / -1;
+  }
+
+  .filters-panel .sub-filters {
     grid-column: 1 / -1;
   }
 

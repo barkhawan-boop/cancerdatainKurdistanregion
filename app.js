@@ -531,11 +531,25 @@ let isAdmin = false;
 let edits = loadEdits();
 let allRows = buildRows();
 
+const MAIN_FILTERS = [
+  { id: "governorateFilter", key: "governorate", index: FIELD.governorate },
+  { id: "yearFilter", key: "year", index: FIELD.year },
+  { id: "sexFilter", key: "sex", index: FIELD.sex },
+  { id: "ageGroupFilter", key: "ageGroup", index: FIELD.ageGroup },
+  { id: "siteFilter", key: "site", index: FIELD.specificSite }
+].filter(filter => Number.isInteger(filter.index));
+
+const MAIN_FILTER_IDS = MAIN_FILTERS.map(filter => filter.id);
+const MAIN_FILTER_INDEXES = new Set(MAIN_FILTERS.map(filter => filter.index));
+const SUB_FILTER_COLUMNS = COLUMNS
+  .map((name, index) => ({ name, index }))
+  .filter(column => column.name && column.index !== FIELD.id && !MAIN_FILTER_INDEXES.has(column.index));
+
 const i18n = {
   en: {
     region: "Kurdistan Region - Iraq", appTitle: "Recorded Cancer Case Statistics", dashboard: "Dashboard", cases: "Cases",
     globalStats: "Global Stats", prevention: "Prevention", admin: "Admin", filters: "Filters", reset: "Reset",
-    search: "Search", searchNow: "Search", searchPlaceholder: "ID, address, morphology...", year: "Year", governorate: "Governorate",
+    search: "Search", searchNow: "Search", searchPlaceholder: "ID, address, morphology...", mainFilters: "Main Filters", subFilters: "Sub Filters", year: "Year", governorate: "Governorate",
     sex: "Sex", ageGroup: "Age Group", cancerSite: "Cancer Site", address: "Address Group",
     reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2025",
     casesByYear: "Cases by Year", topCancerSites: "Top Cancer Sites", byGovernorate: "By Governorate",
@@ -766,6 +780,11 @@ function uniqueValues(index) {
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
 }
 
+function uniqueValuesFromRows(rows, index) {
+  return [...new Set(rows.map(row => optionValue(row[index])).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
+}
+
 function fillSelect(id, index) {
   const select = document.getElementById(id);
   const current = select.value;
@@ -787,35 +806,87 @@ function setLanguage(nextLang) {
 }
 
 function populateFilters() {
-  fillSelect("yearFilter", FIELD.year);
-  fillSelect("governorateFilter", FIELD.governorate);
-  fillSelect("sexFilter", FIELD.sex);
-  fillSelect("ageGroupFilter", FIELD.ageGroup);
-  fillSelect("siteFilter", FIELD.specificSite);
-  fillSelect("addressFilter", FIELD.addressGroup);
+  MAIN_FILTERS.forEach(filter => fillSelect(filter.id, filter.index));
+  renderSubFilters();
+}
+
+function getMainFilterValues() {
+  return MAIN_FILTERS.reduce((values, filter) => {
+    values[filter.key] = document.getElementById(filter.id).value;
+    return values;
+  }, {});
+}
+
+function getSelectedSubFilters() {
+  return [...document.querySelectorAll("#subFiltersGrid select[data-col]")]
+    .map(select => ({ index: Number(select.dataset.col), value: select.value }))
+    .filter(filter => Number.isInteger(filter.index) && filter.value);
+}
+
+function hasActiveMainFilters(mainFilters = getMainFilterValues()) {
+  return Object.values(mainFilters).some(Boolean);
+}
+
+function rowMatchesMainFilters(row, mainFilters) {
+  if (mainFilters.year && optionValue(row[FIELD.year]) !== mainFilters.year) return false;
+  if (mainFilters.governorate && optionValue(row[FIELD.governorate]) !== mainFilters.governorate) return false;
+  if (mainFilters.sex && optionValue(row[FIELD.sex]) !== mainFilters.sex) return false;
+  if (mainFilters.ageGroup && optionValue(row[FIELD.ageGroup]) !== mainFilters.ageGroup) return false;
+  if (mainFilters.site && optionValue(row[FIELD.specificSite]) !== mainFilters.site) return false;
+  return true;
+}
+
+function rowMatchesSubFilters(row, subFilters, skipIndex = null) {
+  return subFilters.every(filter => filter.index === skipIndex || optionValue(row[filter.index]) === filter.value);
+}
+
+function renderSubFilters() {
+  const panel = document.getElementById("subFiltersPanel");
+  const grid = document.getElementById("subFiltersGrid");
+  if (!panel || !grid) return;
+
+  const mainFilters = getMainFilterValues();
+  const showSubFilters = hasActiveMainFilters(mainFilters);
+  panel.classList.toggle("is-hidden", !showSubFilters);
+  if (!showSubFilters) {
+    grid.innerHTML = "";
+    return;
+  }
+
+  const selected = new Map(getSelectedSubFilters().map(filter => [filter.index, filter.value]));
+  const selectedFilters = [...selected.entries()].map(([index, value]) => ({ index, value }));
+  const mainRows = allRows.filter(row => rowMatchesMainFilters(row, mainFilters));
+
+  grid.innerHTML = SUB_FILTER_COLUMNS.map(column => {
+    const selectedValue = selected.get(column.index) || "";
+    const optionRows = mainRows.filter(row => rowMatchesSubFilters(row, selectedFilters, column.index));
+    const values = uniqueValuesFromRows(optionRows, column.index);
+    if (selectedValue && !values.includes(selectedValue)) values.unshift(selectedValue);
+    return `
+      <label>
+        <span>${escapeHtml(displayColumnName(column.name))}</span>
+        <select data-col="${column.index}">
+          <option value="">${escapeHtml(t("all"))}</option>
+          ${values.map(value => `<option value="${escapeAttr(value)}" ${value === selectedValue ? "selected" : ""}>${escapeHtml(displayFieldValue(column.index, value))}</option>`).join("")}
+        </select>
+      </label>
+    `;
+  }).join("");
 }
 
 function getFilterValues() {
   return {
     q: document.getElementById("searchInput").value.trim().toLowerCase(),
-    year: document.getElementById("yearFilter").value,
-    governorate: document.getElementById("governorateFilter").value,
-    sex: document.getElementById("sexFilter").value,
-    ageGroup: document.getElementById("ageGroupFilter").value,
-    site: document.getElementById("siteFilter").value,
-    address: document.getElementById("addressFilter").value
+    main: getMainFilterValues(),
+    sub: getSelectedSubFilters()
   };
 }
 
 function applyFilters() {
   const f = getFilterValues();
   filteredRows = allRows.filter(row => {
-    if (f.year && optionValue(row[FIELD.year]) !== f.year) return false;
-    if (f.governorate && optionValue(row[FIELD.governorate]) !== f.governorate) return false;
-    if (f.sex && optionValue(row[FIELD.sex]) !== f.sex) return false;
-    if (f.ageGroup && optionValue(row[FIELD.ageGroup]) !== f.ageGroup) return false;
-    if (f.site && optionValue(row[FIELD.specificSite]) !== f.site) return false;
-    if (f.address && optionValue(row[FIELD.addressGroup]) !== f.address) return false;
+    if (!rowMatchesMainFilters(row, f.main)) return false;
+    if (!rowMatchesSubFilters(row, f.sub)) return false;
     if (f.q && !row.some((value, index) => {
       const raw = String(value ?? "").toLowerCase();
       const displayed = displayFieldValue(index, value).toLowerCase();
@@ -824,6 +895,7 @@ function applyFilters() {
     return true;
   });
   page = Math.min(page, Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE)));
+  renderSubFilters();
 }
 
 function countBy(rows, index) {
@@ -1074,8 +1146,13 @@ function bindEvents() {
     btn.classList.add("is-active");
     document.getElementById(btn.dataset.view).classList.add("is-active");
   }));
-  ["yearFilter", "governorateFilter", "sexFilter", "ageGroupFilter", "siteFilter", "addressFilter"]
+  MAIN_FILTER_IDS
     .forEach(id => document.getElementById(id).addEventListener("input", () => { page = 1; renderAll(); }));
+  document.getElementById("subFiltersGrid").addEventListener("input", event => {
+    if (!event.target.matches("select[data-col]")) return;
+    page = 1;
+    renderAll();
+  });
   document.getElementById("searchInput").addEventListener("input", event => {
     if (event.target.value.trim() !== "") return;
     page = 1;
@@ -1083,8 +1160,9 @@ function bindEvents() {
   });
   const runSearch = () => {
     if (document.getElementById("searchInput").value.trim()) {
-      ["yearFilter", "governorateFilter", "sexFilter", "ageGroupFilter", "siteFilter", "addressFilter"]
+      MAIN_FILTER_IDS
         .forEach(id => document.getElementById(id).value = "");
+      document.querySelectorAll("#subFiltersGrid select[data-col]").forEach(select => { select.value = ""; });
     }
     page = 1;
     renderAll();
@@ -1098,8 +1176,15 @@ function bindEvents() {
     runSearch();
   });
   document.getElementById("resetFilters").addEventListener("click", () => {
-    ["searchInput", "yearFilter", "governorateFilter", "sexFilter", "ageGroupFilter", "siteFilter", "addressFilter"]
+    ["searchInput", ...MAIN_FILTER_IDS]
       .forEach(id => document.getElementById(id).value = "");
+    document.querySelectorAll("#subFiltersGrid select[data-col]").forEach(select => { select.value = ""; });
+    renderSubFilters();
+    page = 1;
+    renderAll();
+  });
+  document.getElementById("clearSubFilters").addEventListener("click", () => {
+    document.querySelectorAll("#subFiltersGrid select[data-col]").forEach(select => { select.value = ""; });
     page = 1;
     renderAll();
   });
