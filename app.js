@@ -11,7 +11,7 @@ const FIELD = {
   basis: col("Basis of diagnosis"),
   specificSite: col("Specific Site"),
   site: col("Topography type (anatomical site category)"),
-  morphology: col("Morphology code (histology code)"),
+  morphology: col("Morphology code (histology code)", "Morphology code (histology name)"),
   behavior: col("Behavior Description", "Behavior code of tumor"),
   extent: col("Extent of disease (tumor extension)", "Extent of disease (umor extension)"),
   laterality: col("Laterality Description", "Laterality of primary site"),
@@ -26,7 +26,7 @@ const FIELD = {
   family: col("Family history of cancer"),
   sex: col("SEX"),
   age: col("Age at diagnosis"),
-  ageGroup: col("Age Groups"),
+  ageGroup: col("Age Groups", "Age Group"),
   nationality: col("Nationality"),
   address1: col("Address (cities)", "Related Address 1"),
   address2: col("Address (districts)", "Related Address 2"),
@@ -716,6 +716,7 @@ function displayFieldValue(index, value) {
   if (text === "") return text;
   const normalized = text.toUpperCase();
   if (lang === "ckb") {
+    if (normalized === "SULAYMANIYAH") return KURDISH_VALUES.SULAIMANI;
     if (KURDISH_VALUES[normalized]) return KURDISH_VALUES[normalized];
     const anatomy = displayAnatomyPhrase(text, KURDISH_VALUES, "دیارینەکراو", "(غودە)");
     if (anatomy) return anatomy;
@@ -732,6 +733,7 @@ function displayFieldValue(index, value) {
     return text;
   }
   if (lang === "ar") {
+    if (normalized === "SULAYMANIYAH") return ARABIC_VALUES.SULAIMANI;
     if (ARABIC_VALUES[normalized]) return ARABIC_VALUES[normalized];
     const anatomy = displayAnatomyPhrase(text, ARABIC_VALUES, "غير محدد", "(غدة)");
     if (anatomy) return anatomy;
