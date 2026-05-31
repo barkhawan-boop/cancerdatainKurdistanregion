@@ -1,6 +1,7 @@
 const DATA = window.CANCER_DATA;
 const COLUMNS = DATA.columns;
 const ROWS = DATA.rows;
+const TOPOGRAPHY_SITE_OPTIONS = window.TOPOGRAPHY_SITE_OPTIONS || [];
 const columnIndex = Object.fromEntries(COLUMNS.map((name, index) => [name, index]));
 const col = (...names) => names.map(name => columnIndex[name]).find(index => index !== undefined);
 
@@ -536,7 +537,7 @@ const MAIN_FILTERS = [
   { id: "yearFilter", key: "year", index: FIELD.year },
   { id: "sexFilter", key: "sex", index: FIELD.sex },
   { id: "ageGroupFilter", key: "ageGroup", index: FIELD.ageGroup },
-  { id: "siteFilter", key: "site", index: FIELD.specificSite }
+  { id: "siteFilter", key: "site", index: FIELD.site }
 ].filter(filter => Number.isInteger(filter.index));
 
 const MAIN_FILTER_IDS = MAIN_FILTERS.map(filter => filter.id);
@@ -552,7 +553,7 @@ const i18n = {
     search: "Search", searchNow: "Search", searchPlaceholder: "ID, address, morphology...", mainFilters: "Main Filters", subFilters: "Sub Filters", year: "Year", governorate: "Governorate",
     sex: "Sex", ageGroup: "Age Group", cancerSite: "Cancer Site", address: "Address Group",
     reportTitle: "Recorded cancer case statistics in the Kurdistan Region - Iraq, 2020-2025",
-    casesByYear: "Cases by Year", topCancerSites: "Top Cancer Sites", byGovernorate: "By Governorate",
+    casesByYear: "Cases by Year", topCancerSites: "Top Cancer Sites", byGovernorate: "By Governorate", subFilterCharts: "Sub Filter Charts",
     byAge: "By Age Group", allData: "All Filtered Data", prev: "Previous", next: "Next",
     refreshSources: "Check sources", officialSources: "Official Sources", preventionTitle: "How to reduce cancer risk",
     iraqReasons: "Main cancer risk drivers in Iraq", adminLogin: "Admin Login", username: "Username", password: "Password",
@@ -572,7 +573,7 @@ const i18n = {
     search: "گەڕان", searchNow: "گەڕان", searchPlaceholder: "ئایدی، ناونیشان، مۆرفۆلۆجی...", year: "ساڵ", governorate: "پارێزگا",
     sex: "ڕەگەز", ageGroup: "گروپی تەمەن", cancerSite: "شوێنی شێرپەنجە", address: "گروپی ناونیشان",
     reportTitle: "ئاماری کەیسە تۆمارکراوەکانی شێرپەنجە لە هەرێمی کوردستان - عێراق، ٢٠٢٠-٢٠٢٥",
-    casesByYear: "کەیس بەپێی ساڵ", topCancerSites: "زۆرترین جۆرەکان",
+    casesByYear: "کەیس بەپێی ساڵ", topCancerSites: "زۆرترین جۆرەکان", subFilterCharts: "چارتەکانی فلتەری لاوەکی",
     byGovernorate: "بەپێی پارێزگا", byAge: "بەپێی تەمەن", allData: "هەموو داتای فلتەرکراو",
     prev: "پێشوو", next: "دواتر", refreshSources: "پشکنینی سەرچاوەکان", officialSources: "سەرچاوە فەرمییەکان",
     preventionTitle: "چۆن مەترسی شێرپەنجە کەم بکەیتەوە", iraqReasons: "هۆکارە سەرەکییەکانی مەترسی لە عێراق",
@@ -594,7 +595,7 @@ const i18n = {
     search: "بحث", searchNow: "بحث", searchPlaceholder: "المعرف، العنوان، المورفولوجيا...", year: "السنة", governorate: "المحافظة",
     sex: "الجنس", ageGroup: "الفئة العمرية", cancerSite: "موقع السرطان", address: "مجموعة العنوان",
     reportTitle: "إحصاء حالات السرطان المسجلة في إقليم كردستان - العراق، 2020-2025",
-    casesByYear: "الحالات حسب السنة", topCancerSites: "أكثر مواقع السرطان", byGovernorate: "حسب المحافظة",
+    casesByYear: "الحالات حسب السنة", topCancerSites: "أكثر مواقع السرطان", byGovernorate: "حسب المحافظة", subFilterCharts: "مخططات الفلاتر الفرعية",
     byAge: "حسب العمر", allData: "كل البيانات المفلترة", prev: "السابق", next: "التالي",
     refreshSources: "فحص المصادر", officialSources: "المصادر الرسمية", preventionTitle: "كيف تقلل خطر السرطان",
     iraqReasons: "أهم عوامل الخطر في العراق", adminLogin: "تسجيل دخول الإدارة", username: "اسم المستخدم",
@@ -777,6 +778,10 @@ function optionValue(value) {
   return String(value ?? "").trim();
 }
 
+function sameOptionValue(left, right) {
+  return optionValue(left).toLocaleLowerCase() === optionValue(right).toLocaleLowerCase();
+}
+
 function uniqueValues(index) {
   return [...new Set(allRows.map(row => optionValue(row[index])).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
@@ -790,7 +795,8 @@ function uniqueValuesFromRows(rows, index) {
 function fillSelect(id, index) {
   const select = document.getElementById(id);
   const current = select.value;
-  select.innerHTML = `<option value="">${t("all")}</option>` + uniqueValues(index)
+  const values = id === "siteFilter" && TOPOGRAPHY_SITE_OPTIONS.length ? TOPOGRAPHY_SITE_OPTIONS : uniqueValues(index);
+  select.innerHTML = `<option value="">${t("all")}</option>` + values
     .map(value => `<option value="${escapeAttr(value)}">${escapeHtml(displayFieldValue(index, value))}</option>`).join("");
   select.value = current;
 }
@@ -834,7 +840,7 @@ function rowMatchesMainFilters(row, mainFilters) {
   if (mainFilters.governorate && optionValue(row[FIELD.governorate]) !== mainFilters.governorate) return false;
   if (mainFilters.sex && optionValue(row[FIELD.sex]) !== mainFilters.sex) return false;
   if (mainFilters.ageGroup && optionValue(row[FIELD.ageGroup]) !== mainFilters.ageGroup) return false;
-  if (mainFilters.site && optionValue(row[FIELD.specificSite]) !== mainFilters.site) return false;
+  if (mainFilters.site && !sameOptionValue(row[FIELD.site], mainFilters.site)) return false;
   return true;
 }
 
@@ -949,6 +955,31 @@ function renderCharts() {
   renderBarChart("siteChart", countMeaningfulBy(filteredRows, FIELD.specificSite), 10, FIELD.specificSite);
   renderBarChart("governorateChart", countBy(filteredRows, FIELD.governorate), 6, FIELD.governorate);
   renderBarChart("ageChart", countBy(filteredRows, FIELD.ageGroup), 10, FIELD.ageGroup);
+  renderSubFilterCharts();
+}
+
+function renderSubFilterCharts() {
+  const container = document.getElementById("subFilterCharts");
+  if (!container) return;
+
+  const charts = SUB_FILTER_COLUMNS
+    .map(column => ({
+      ...column,
+      chartId: `subFilterChart-${column.index}`,
+      entries: countMeaningfulBy(filteredRows, column.index)
+    }))
+    .filter(chart => chart.entries.length > 0);
+
+  container.innerHTML = charts.length ? charts.map(chart => `
+    <section class="panel sub-chart-panel">
+      <div class="panel-title">
+        <h3>${escapeHtml(displayColumnName(chart.name))}</h3>
+      </div>
+      <div id="${chart.chartId}" class="bar-chart"></div>
+    </section>
+  `).join("") : `<section class="panel"><p class="source-note">${t("noData")}</p></section>`;
+
+  charts.forEach(chart => renderBarChart(chart.chartId, chart.entries, 6, chart.index));
 }
 
 function renderTable() {

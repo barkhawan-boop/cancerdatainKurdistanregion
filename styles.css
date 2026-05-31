@@ -386,6 +386,37 @@ button {
   gap: 14px;
 }
 
+.chart-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0 16px;
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.chart-divider::before,
+.chart-divider::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--teal), var(--rose));
+}
+
+.chart-divider::after {
+  opacity: .35;
+}
+
+.sub-chart-grid {
+  align-items: start;
+}
+
+.sub-chart-panel .bar-row {
+  grid-template-columns: minmax(110px, 190px) 1fr minmax(54px, auto);
+  font-size: .84rem;
+}
+
 .panel {
   padding: 18px;
   min-width: 0;
